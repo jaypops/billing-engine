@@ -1,0 +1,22 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Rust (billing-engine-backend)
+billing-engine-backend/target/
+
+# Next.js (billing-engine-frontend)
+billing-engine-frontend/node_modules/
+billing-engine-frontend/.next/
+billing-engine-frontend/out/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
