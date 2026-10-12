@@ -20,6 +20,9 @@ pub enum AppError {
 
     #[error("internal server error: {0}")]
     Internal(String),
+
+    #[error("conflict: {0}")]
+    Conflict(String),
 }
 
 impl IntoResponse for AppError {
@@ -43,6 +46,7 @@ impl IntoResponse for AppError {
             AppError::NotFound(msg) => (StatusCode::NOT_FOUND, msg.clone()),
             AppError::Unauthorized(msg) => (StatusCode::UNAUTHORIZED, msg.clone()),
             AppError::Validation(msg) => (StatusCode::BAD_REQUEST, msg.clone()),
+            AppError::Conflict(msg) => (StatusCode::CONFLICT, msg.clone()),
         };
 
         let body = serde_json::json!({ "error": client_message });

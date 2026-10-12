@@ -2,6 +2,7 @@ use utoipa::OpenApi;
 
 use crate::state::AppState;
 
+pub mod auth;
 pub mod health;
 
 #[derive(OpenApi)]
@@ -11,8 +12,6 @@ pub mod health;
         version = "0.1.0",
         description = "A billing engine API for handling payments, subscriptions, and invoicing."
     ),
-    paths(health::health,),
-    components(schemas())
 )]
 pub struct ApiDoc;
 
@@ -22,6 +21,7 @@ pub fn app() -> axum::Router<AppState> {
 
     let (router, api) = OpenApiRouter::<AppState>::with_openapi(ApiDoc::openapi())
         .routes(routes!(health::health))
+        .routes(routes!(auth::signup))
         .split_for_parts();
 
     router.merge(Scalar::with_url("/docs", api))

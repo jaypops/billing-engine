@@ -4,6 +4,7 @@ mod config;
 mod error;
 mod routes;
 mod state;
+mod auth;
 
 use sqlx::postgres::PgPoolOptions;
 
