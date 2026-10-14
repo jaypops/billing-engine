@@ -59,7 +59,13 @@ pub async fn signup(
     let password_len = body.password.chars().count();
     if password_len < MIN_PASSWORD_LEN {
         return Err(AppError::Validation(format!(
-            "password must be up to {} characters",
+            "password must be at least {} characters",
+            MIN_PASSWORD_LEN
+        )));
+    }
+    if password_len > MAX_PASSWORD_LEN {
+        return Err(AppError::Validation(format!(
+            "password must be at most {} characters",
             MAX_PASSWORD_LEN
         )));
     }
@@ -159,6 +165,9 @@ pub async fn login(
     post,
     path = "/auth/logout",
     tag = "auth",
+    security(
+        ("bearer_auth" = [])
+    ),
     responses(
         (status = 204, description = "Logged out"),
         (status = 401, description = "Missing, invalid or expired token"),
@@ -173,6 +182,9 @@ pub async fn logout(State(state): State<AppState>, auth: AuthUser) -> Result<Sta
     post,
     path = "/auth/me",
     tag = "auth",
+    security(
+        ("bearer_auth" = [])
+    ),
     responses(
         (status = 200, description = "Current user data", body = CurrentUser),
         (status = 401, description = "Missing, invalid or expired token"),

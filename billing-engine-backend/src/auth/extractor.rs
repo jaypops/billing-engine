@@ -14,6 +14,9 @@ pub struct AuthUser {
     pub token: String,
 }
 
+pub struct AdminUser(pub AuthUser);
+
+
 impl FromRequestParts<AppState> for AuthUser {
     type Rejection = AppError;
 
@@ -42,5 +45,23 @@ impl FromRequestParts<AppState> for AuthUser {
             user,
             token: token.to_string(),
         })
+    }
+}
+
+
+impl FromRequestParts<AppState> for AdminUser {
+    type Rejection = AppError;
+
+    async fn from_request_parts(
+        parts: &mut Parts,
+        state: &AppState,
+    ) -> Result<Self, Self::Rejection> {
+        let auth = AuthUser::from_request_parts(parts, state).await?;
+
+        if !auth.user.is_admin {
+            return Err(AppError::Forbidden("admin only".into()));
+        }
+
+        Ok(AdminUser(auth))
     }
 }
