@@ -7,6 +7,7 @@ mod config;
 mod error;
 mod routes;
 mod state;
+mod money;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

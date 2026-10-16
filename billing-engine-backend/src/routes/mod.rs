@@ -7,6 +7,7 @@ use crate::state::AppState;
 pub mod auth;
 pub mod customers;
 pub mod health;
+pub mod plans;
 
 pub struct SecurityAddon;
 
@@ -48,6 +49,9 @@ pub fn app() -> axum::Router<AppState> {
             customers::list_customers
         ))
         .routes(routes!(customers::get_customer))
+        .routes(routes!(plans::create_plan, plans::list_plans))
+        .routes(routes!(plans::get_plan))
+        .routes(routes!(plans::archive_plan))
         .split_for_parts();
 
     router.merge(Scalar::with_url("/docs", api))
