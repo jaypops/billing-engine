@@ -8,6 +8,7 @@ pub mod auth;
 pub mod customers;
 pub mod health;
 pub mod plans;
+pub mod subscriptions;
 
 pub struct SecurityAddon;
 
@@ -52,6 +53,11 @@ pub fn app() -> axum::Router<AppState> {
         .routes(routes!(plans::create_plan, plans::list_plans))
         .routes(routes!(plans::get_plan))
         .routes(routes!(plans::archive_plan))
+        .routes(routes!(
+            subscriptions::create_subscription,
+            subscriptions::list_subscriptions
+        ))
+        .routes(routes!(subscriptions::get_subscription))
         .split_for_parts();
 
     router.merge(Scalar::with_url("/docs", api))
